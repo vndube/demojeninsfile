@@ -1,6 +1,9 @@
 pipeline {
     agent any
-
+    parameters {
+		string(name: 'fname', defaultValue: 'not specified', description: 'First Name')
+		string(name: 'product', defaultValue: 'not specified', description: 'No Product Specified')
+	}
     stages {
         stage('Example') {
             steps {
