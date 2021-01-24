@@ -6,7 +6,7 @@ pipeline {
 		string(name: 'clientid', defaultValue: 'not specified', description: 'Client Id for which the build will be processed')
 		string(name: 'clientdir', defaultValue: 'clientdir', description: 'Directory of client')
 		string(name: 'credentialkey', defaultValue: 'Not available', description: 'Credential of user')
-		string(name: ' gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
+		string(name: 'gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
 
     }
     environment {
