@@ -12,12 +12,12 @@ pipeline {
 	
 	    stage('Clone sources') {
 		    steps {
-                echo "Clone Source and Checking out"
+                echo "Clone Source and Checking out $builddir"
 			//	git url: 'https://github.com/vndube/testnewrepo.git'
 				
-				sh 'mkdir -p ' + ${params.clientid}
+				sh 'mkdir -p ' + builddir
 				
-				dir($builddir) {
+				dir(builddir) {
 					checkout([$class: 'GitSCM', 
 					   branches: [[name: '*/master']], 
 					   doGenerateSubmoduleConfigurations: false, 
