@@ -3,7 +3,14 @@ pipeline {
     parameters {
 		string(name: 'fname', defaultValue: 'not specified', description: 'First Name')
 		string(name: 'product', defaultValue: 'not specified', description: 'No Product Specified')
+
+		string(name: 'clientid', defaultValue: 'not specified', description: 'No Product Specified')
+
 	}
+	
+	environment {
+        builddir = ${params.clientid}
+    }
     stages {
 	
 	    stage('Clone sources') {
@@ -11,13 +18,17 @@ pipeline {
                 echo "Clone Source and Checking out"
 			//	git url: 'https://github.com/vndube/testnewrepo.git'
 				
-				checkout([$class: 'GitSCM', 
-				   branches: [[name: '*/master']], 
-				   doGenerateSubmoduleConfigurations: false, 
-				   extensions: [[$class: 'RelativeTargetDirectory', 
-							   relativeTargetDir: 'folder2']], 
-				   submoduleCfg: [], 
-				   userRemoteConfigs: [[url: 'https://github.com/vndube/testnewrepo.git']]])
+				sh 'mkdir -p ' + ${params.clientid}
+				
+				dir(builddir) {
+					checkout([$class: 'GitSCM', 
+					   branches: [[name: '*/master']], 
+					   doGenerateSubmoduleConfigurations: false, 
+					   extensions: [[$class: 'RelativeTargetDirectory', 
+								   relativeTargetDir: 'folder2']], 
+					   submoduleCfg: [], 
+					   userRemoteConfigs: [[url: 'https://github.com/vndube/testnewrepo.git']]])
+				}
 		    }
 		}
 	
@@ -28,4 +39,59 @@ pipeline {
              }
         }
     }
+
+    post {
+        // Always runs. And it runs before any of the other post conditions.
+        always {
+            // Let's wipe out the workspace before we finish!
+            deleteDir()
+        }
+        success {
+            sendEmail("Successful");
+        }
+        unstable {
+            sendEmail("Unstable");
+        }
+        failure {
+            sendEmail("Failed");
+        }
+    }
+
+// The options directive is for configuration that applies to the whole job.
+    options {
+        // For example, we'd like to make sure we only keep 10 builds at a time, so
+        // we don't fill up our storage!
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+
+        // And we'd really like to be sure that this build doesn't hang forever, so
+        // let's time it out after an hour.
+        timeout(time: 25, unit: 'MINUTES')
+    }	
+}
+
+
+// get change log to be send over the mail
+@NonCPS
+def getChangeString() {
+    MAX_MSG_LEN = 100
+    def changeString = ""
+
+    echo "Gathering SCM changes"
+    def changeLogSets = currentBuild.changeSets
+    for (int i = 0; i < changeLogSets.size(); i++) {
+        def entries = changeLogSets[i].items
+        for (int j = 0; j < entries.length; j++) {
+            def entry = entries[j]
+            truncated_msg = entry.msg.take(MAX_MSG_LEN)
+            changeString += " - ${truncated_msg} [${entry.author}]\n"
+    }
+}
+
+def sendEmail(status) {
+   echo "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})"
+  
+  //  mail(
+  //          to: "$EMAIL_RECIPIENTS",
+  //          subject: "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})",
+  //          body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n")
 }
