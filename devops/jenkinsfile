@@ -28,7 +28,7 @@ pipeline {
 //					        [$class: 'RelativeTargetDirectory', 
 //							relativeTargetDir: 'folder2']
 							[$class: 'SparseCheckoutPaths',
-							 sparseCheckoutPaths: [[path: $env.builddir]]]
+							 sparseCheckoutPaths: [[path: "$env.builddir"]]]
 							], 
 					   submoduleCfg: [], 
 					   userRemoteConfigs: [[url: 'https://github.com/vndube/testnewrepo.git']]])
