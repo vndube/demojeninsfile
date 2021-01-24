@@ -3,7 +3,9 @@ pipeline {
     parameters {
 		string(name: 'fname', defaultValue: 'not specified', description: 'First Name')
 		string(name: 'product', defaultValue: 'not specified', description: 'No Product Specified')
-		string(name: 'clientid', defaultValue: 'not specified', description: 'No Product Specified')
+		string(name: 'clientid', defaultValue: 'not specified', description: 'Client Id for which the build will be processed')
+		string(name: 'clientdir', defaultValue: 'clientdir', description: 'Directory of client')
+
     }
     environment {
         builddir = "${params.clientid}"
@@ -25,7 +27,7 @@ pipeline {
 //					        [$class: 'RelativeTargetDirectory', 
 //							relativeTargetDir: 'folder2']
 							[$class: 'SparseCheckoutPaths',
-							 sparseCheckoutPaths: [[path: '/folder2']]]
+							 sparseCheckoutPaths: [[path: '/${params.clientdir}']]]
 							], 
 					   submoduleCfg: [], 
 					   userRemoteConfigs: [[url: 'https://github.com/vndube/testnewrepo.git']]])
