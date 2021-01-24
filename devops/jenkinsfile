@@ -7,8 +7,9 @@ pipeline {
     stages {
 	
 	    stage('Clone sources') {
-            echo "Clone Source and Checking out"
-
+		    steps {
+                echo "Clone Source and Checking out"
+            }
 		//	git url: 'https://github.com/vndube/testnewrepo.git'
 			
             checkout([$class: 'GitSCM', 
