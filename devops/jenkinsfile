@@ -9,13 +9,14 @@ pipeline {
     }
     environment {
         builddir = "${params.clientid}"
+		clientdir =  "${params.clientdir}"
 		
     }
     stages {
 	
 	    stage('Clone sources') {
 		    steps {
-                echo "Clone Source and Checking out $builddir"
+                echo "Clone Source and Checking out $builddir and client dir is $clientdir"
 			//	git url: 'https://github.com/vndube/testnewrepo.git'
 				
 				sh 'mkdir -p ' + builddir
@@ -28,7 +29,7 @@ pipeline {
 //					        [$class: 'RelativeTargetDirectory', 
 //							relativeTargetDir: 'folder2']
 							[$class: 'SparseCheckoutPaths',
-							 sparseCheckoutPaths: [[path: builddir]]]
+							 sparseCheckoutPaths: [[path: clientdir]]]
 							], 
 					   submoduleCfg: [], 
 					   userRemoteConfigs: [[url: 'https://github.com/vndube/testnewrepo.git']]])
