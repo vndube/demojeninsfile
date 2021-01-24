@@ -3,13 +3,10 @@ pipeline {
     parameters {
 		string(name: 'fname', defaultValue: 'not specified', description: 'First Name')
 		string(name: 'product', defaultValue: 'not specified', description: 'No Product Specified')
-
 		string(name: 'clientid', defaultValue: 'not specified', description: 'No Product Specified')
-
-	}
-	
-	environment {
-        builddir = ${params.clientid}
+    }
+    environment {
+        builddir = "${params.clientid}"
     }
     stages {
 	
@@ -20,7 +17,7 @@ pipeline {
 				
 				sh 'mkdir -p ' + ${params.clientid}
 				
-				dir(builddir) {
+				dir($builddir) {
 					checkout([$class: 'GitSCM', 
 					   branches: [[name: '*/master']], 
 					   doGenerateSubmoduleConfigurations: false, 
