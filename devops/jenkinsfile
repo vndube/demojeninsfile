@@ -5,11 +5,15 @@ pipeline {
 		string(name: 'product', defaultValue: 'not specified', description: 'No Product Specified')
 		string(name: 'clientid', defaultValue: 'not specified', description: 'Client Id for which the build will be processed')
 		string(name: 'clientdir', defaultValue: 'clientdir', description: 'Directory of client')
+		string(name: 'credentialkey', defaultValue: 'Not available', description: 'Credential of user')
+		string(name: ' gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
 
     }
     environment {
         builddir = "${params.clientid}"
 		clientdir =  "${params.clientdir}"
+        credentialkey = "${params.credentialkey}"
+		gitrepourl =  "${params.gitrepourl}"
     }
     stages {
 	
@@ -31,8 +35,9 @@ pipeline {
 							 sparseCheckoutPaths: [[path: clientdir]]]
 							], 
 					   submoduleCfg: [], 
-					   userRemoteConfigs: [[  credentialsId: 'e8f3366fe2096f77c2c0d27b3b0331ffd5eb2c4e', url: 'https://github.com/vndube/testnewrepo.git']]])
-//					   userRemoteConfigs: [[credentialsId: '2b74a351-67d5-4d00-abd3-49842a984201', url: 'ssh://git@corporate.com:repo.git']]
+					   userRemoteConfigs: [[  credentialsId: credentialkey, url: gitrepourl]]])
+
+//					   userRemoteConfigs: [[  credentialsId: 'e8f3366fe2096f77c2c0d27b3b0331ffd5eb2c4e', url: 'https://github.com/vndube/testnewrepo.git']]])
 				}
 		    }
 		}
