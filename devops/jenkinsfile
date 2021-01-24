@@ -41,7 +41,7 @@ pipeline {
         // Always runs. And it runs before any of the other post conditions.
         always {
             // Let's wipe out the workspace before we finish!
-            deleteDir()
+           // deleteDir()
         }
         success {
             sendEmail("Successful");
@@ -87,6 +87,8 @@ def getChangeString() {
 
 def sendEmail(status) {
    echo "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})"
+   echo "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})"
+   echo "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" 
   
   //  mail(
   //          to: "$EMAIL_RECIPIENTS",
