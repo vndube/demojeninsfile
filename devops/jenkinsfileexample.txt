@@ -1,0 +1,17 @@
+curl -X POST http://vndube:11efd14ed5a49c45ad92e088a1baa25b13@localhost:8080/jenkins/job/demojenkinsfile/build --data-urlencode json="{'parameter': [{'name':'fname', 'value':'vish'}, {'name':'product', 'value':'myproduct'}]}"
+
+
+curl -X POST http://vndube:11efd14ed5a49c45ad92e088a1baa25b13@localhost:8080/jenkins/job/demowithparam/build --data-urlencode json="{'parameter': [{'name':'fname', 'value':'vish'}, {'name':'product', 'value':'myproduct'},{'name':'clientid','value':'cliendid001'}]}"
+
+
+curl -X POST http://vndube:11efd14ed5a49c45ad92e088a1baa25b13@localhost:8080/jenkins/job/demowithparam/build?fname=Vish
+
+--data-urlencode json="{'parameter': [{'name':'fname', 'value':'vish'}, {'name':'product', 'value':'myproduct'}]}"
+
+
+
+curl -X POST http://vndube:11efd14ed5a49c45ad92e088a1baa25b13@localhost:8080/jenkins/job/demowithparam/build --data-urlencode json="{'parameter': [{'name':'fname', 'value':'vish'}, {'name':'product', 'value':'myproduct'}, {'name':'clientid', 'value':'cliendid001'}, {'name':'clientdir', 'value':'/folder2'}]}"
+
+
+
+curl -X POST http://vndube:11efd14ed5a49c45ad92e088a1baa25b13@localhost:8080/jenkins/job/demowithparam/build --data-urlencode json="{'parameter': [{'name':'fname', 'value':'vish'}, {'name':'product', 'value':'myproduct'}, {'name':'clientid', 'value':'cliendid003'}, {'name':'clientdir', 'value':'/folder2'}, {'name':'credentialkey', 'value':'e8f3366fe2096f77c2c0d27b3b0331ffd5eb2c4e'}, {'name':'gitrepourl', 'value':'https://github.com/vndube/testnewrepo.git'}]}"
