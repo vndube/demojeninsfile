@@ -53,9 +53,11 @@ pipeline {
 
    			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
-			   dir(builddirclientdir) {
-				sh tar cvf "package.tar" .
-			   }
+			   dir(builddir) {
+					dir(clientdir) {
+					   sh tar cvf "package.tar" .
+				    }
+				}
 			}
         }		
         stage('Example') {
