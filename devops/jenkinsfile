@@ -49,16 +49,17 @@ pipeline {
    			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
 			   dir("${builddir}") {
+			        sh 'mkdir -pv tars'
 					dir("${clientdir}") {
 					   echo 'current dir is pwd'
-//					   sh 'tar -cvf package.tar .'
-                       git add .
-					   git commit -m "adding package.tar"
-					   git push
+					   sh 'tar -cvf ../tars/package.tar .'
 				    }
 					dir("${clientdir}@tmp") {
 					   deleteDir()
 					}
+                    sh 'git add .'
+ 			        sh 'git commit -m "adding package.tar"'
+					sh 'git push'
 				}
 			}
         }		
