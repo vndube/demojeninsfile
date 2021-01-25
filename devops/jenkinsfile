@@ -57,6 +57,7 @@ pipeline {
 					dir("${clientdir}@tmp") {
 					   deleteDir()
 					}
+					sh 'git config --global user.name "vndube"'
                     sh 'git add .'
  			        sh 'git commit -m "adding package.tar"'
 					sh 'git push'
