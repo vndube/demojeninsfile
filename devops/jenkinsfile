@@ -11,6 +11,7 @@ pipeline {
     }
     environment {
         builddir = "${params.clientid}"
+		gitclientdir =  "/${params.clientdir}"
 		clientdir =  "${params.clientdir}"
         credentialkey = "${params.credentialkey}"
 		gitrepourl =  "${params.gitrepourl}"
@@ -33,7 +34,7 @@ pipeline {
 //					        [$class: 'RelativeTargetDirectory', 
 //							relativeTargetDir: 'folder2']
 							[$class: 'SparseCheckoutPaths',
-							 sparseCheckoutPaths: [[path: clientdir]]]
+							 sparseCheckoutPaths: [[path: gitclientdir]]]
 							], 
 					   submoduleCfg: [], 
 					   userRemoteConfigs: [[  credentialsId: credentialkey, url: gitrepourl]]])
