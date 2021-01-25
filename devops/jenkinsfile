@@ -41,7 +41,17 @@ pipeline {
 				}
 		    }
 		}
-	
+
+        stage('Collect Reports') {
+		
+		steps {
+		
+            echo "Reports directory: ${workspace}"
+			// Create a zip file of content in the workspace
+			//zip dir: "${workspace}/target", zipFile: "$reportZipFile" 
+		}
+		
+        }		
         stage('Example') {
             steps {
                 echo "Hello ${params.fname}"
