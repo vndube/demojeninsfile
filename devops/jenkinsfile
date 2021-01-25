@@ -50,7 +50,8 @@ pipeline {
 			   // Create a zip file of content in the workspace
 			   dir(builddir) {
 					dir(clientdir) {
-					   sh 'tar -cvf package.tar .'
+					   echo 'current dir is pwd'
+//					   sh 'tar -cvf package.tar .'
 				    }
 				}
 			}
