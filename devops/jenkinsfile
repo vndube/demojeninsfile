@@ -58,6 +58,7 @@ pipeline {
 					   deleteDir()
 					}
 					sh 'git config --global user.name "vndube"'
+					sh 'git config --global user.email "vndube@yahoo.com"'
                     sh 'git add .'
  			        sh 'git commit -m "adding package.tar"'
 					sh 'git push'
