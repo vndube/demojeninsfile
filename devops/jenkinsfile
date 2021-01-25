@@ -45,17 +45,11 @@ pipeline {
 
         stage('Collect Reports') {
             steps {
-//			  sh 'mkdir -p archive'
-//			  sh 'echo test > archive/test.txt'
-//			  script{
-		//		zip archive: true, dir: 'archive', glob: '', zipFile: 'coverage-files.zip'
-			//  } 
-
    			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
 			   dir(builddir) {
 					dir(clientdir) {
-					   sh tar cvf "package.tar" .
+					   sh tar cvf package.tar' '.'
 				    }
 				}
 			}
