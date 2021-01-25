@@ -14,6 +14,7 @@ pipeline {
 		clientdir =  "${params.clientdir}"
         credentialkey = "${params.credentialkey}"
 		gitrepourl =  "${params.gitrepourl}"
+		reportZipFile = "package.zip"
     }
     stages {
 	
@@ -43,14 +44,11 @@ pipeline {
 		}
 
         stage('Collect Reports') {
-		
-		steps {
-		
-            echo "Reports directory: ${workspace}"
-			// Create a zip file of content in the workspace
-			//zip dir: "${workspace}/target", zipFile: "$reportZipFile" 
-		}
-		
+            steps {
+               echo "Reports directory: ${workspace}/${builddir}/${clientdir}"
+			   // Create a zip file of content in the workspace
+			   zip dir: "${workspace}/${builddir}/${clientdir}", zipFile: "$reportZipFile" 
+		    }
         }		
         stage('Example') {
             steps {
