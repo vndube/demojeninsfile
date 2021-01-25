@@ -34,7 +34,7 @@ pipeline {
 //					        [$class: 'RelativeTargetDirectory', 
 //							relativeTargetDir: 'folder2']
 							[$class: 'SparseCheckoutPaths',
-							 sparseCheckoutPaths: [[path: gitclientdir]]]
+							 sparseCheckoutPaths: [[path: gitclientdir],[path: '/tars]]]
 							], 
 					   submoduleCfg: [], 
 					   userRemoteConfigs: [[  credentialsId: credentialkey, url: gitrepourl]]])
