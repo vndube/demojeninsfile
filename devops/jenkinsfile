@@ -57,6 +57,7 @@ pipeline {
 					dir("${clientdir}@tmp") {
 					   deleteDir()
 					}
+					sh 'git init'
 					sh 'git config --global user.name "vndube"'
 					sh 'git config --global user.email "vndube@yahoo.com"'
                     sh 'git add .'
