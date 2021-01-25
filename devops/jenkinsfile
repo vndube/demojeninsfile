@@ -45,10 +45,10 @@ pipeline {
 
         stage('Collect Reports') {
             steps {
-               echo "Reports directory: ${workspace}/${builddir}/${clientdir}"
+               echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
 			   script{
-			      zip dir: "${workspace}/${builddir}/${clientdir}", zipFile: "$reportZipFile" 
+			      zip dir: "${workspace}/${builddir}${clientdir}", zipFile: "$reportZipFile" 
 			   }
 		    }
         }		
