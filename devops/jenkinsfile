@@ -48,7 +48,7 @@ pipeline {
                echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
 			   script{
-			      zip dir: "${workspace}/${builddir}${clientdir}", zipFile: "$reportZipFile" 
+			      zip archive: true, dir: '{workspace}/${builddir}${clientdir}', zipFile: 'package.zip' 
 			   }
 		    }
         }		
