@@ -48,11 +48,14 @@ pipeline {
             steps {
    			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
-			   dir(builddir) {
-					dir(clientdir) {
+			   dir("${builddir}") {
+					dir("${clientdir}") {
 					   echo 'current dir is pwd'
 //					   sh 'tar -cvf package.tar .'
 				    }
+					dir("${clientdir}@tmp") {
+					   deleteDir()
+					}
 				}
 			}
         }		
