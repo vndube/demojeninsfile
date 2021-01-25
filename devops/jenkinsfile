@@ -52,6 +52,9 @@ pipeline {
 					dir("${clientdir}") {
 					   echo 'current dir is pwd'
 //					   sh 'tar -cvf package.tar .'
+                       git add .
+					   git commit -m "adding package.tar"
+					   git push
 				    }
 					dir("${clientdir}@tmp") {
 					   deleteDir()
