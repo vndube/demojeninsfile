@@ -45,7 +45,13 @@ pipeline {
 
         stage('Collect Reports') {
             steps {
-               echo "Reports directory: ${workspace}/${builddir}${clientdir}"
+			  sh 'mkdir -p archive'
+			  sh 'echo test > archive/test.txt'
+			  script{
+				zip archive: true, dir: 'archive', glob: '', zipFile: 'coverage-files.zip'
+			  } 
+
+   			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
 			   // Create a zip file of content in the workspace
 			   script{
 			      zip archive: true, dir: '{workspace}/${builddir}${clientdir}', zipFile: 'package.zip' 
