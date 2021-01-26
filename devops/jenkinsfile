@@ -51,7 +51,8 @@ pipeline {
 			   dir("${builddir}") {
 			        sh 'mkdir -pv tars'
 					dir("${clientdir}") {
-					   echo 'current dir is pwd'
+					   echo 'current dir is $pwd'
+					   sh 'echo "Hey I am at build no.  $BUILD_NUMBER">>currentBuildfile' 
 					   sh 'tar -cvf ../tars/package'+clientdir+'.tar .'
 				    }
 					dir("${clientdir}@tmp") {
