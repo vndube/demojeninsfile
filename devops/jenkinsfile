@@ -52,7 +52,7 @@ pipeline {
 			        sh 'mkdir -pv tars'
 					dir("${clientdir}") {
 					   echo 'current dir is pwd'
-					   sh 'tar -cvf ../tars/package.tar .'
+					   sh 'tar -cvf ../tars/package'+clientdir+'.tar .'
 				    }
 					dir("${clientdir}@tmp") {
 					   deleteDir()
