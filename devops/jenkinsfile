@@ -62,7 +62,7 @@ pipeline {
 			//		sh 'git config --global user.email "vndube@yahoo.com"'
                     sh 'git add .'
  			        sh 'git commit -m "adding package.tar"'
-					sh 'git push origin Head:master'
+					sh 'git push origin HEAD:master'
 				}
 			}
         }		
