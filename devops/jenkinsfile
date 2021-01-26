@@ -58,12 +58,14 @@ pipeline {
 					dir("${clientdir}@tmp") {
 					   deleteDir()
 					}
-					sh 'git init'
-			//		sh 'git config --global user.name "vndube"'
-			//		sh 'git config --global user.email "vndube@yahoo.com"'
-                    sh 'git add .'
- 			        sh 'git commit -m "adding package.tar"'
-					sh 'git push origin HEAD:master'
+					sh '''
+					git init
+                    git add .
+ 			        msg_out = git commit -m "adding package.tar"
+					if [! echo $msg_out|grep -i "nothing to commit"]
+						git push origin HEAD:master
+					fi
+					'''
 				}
 			}
         }		
