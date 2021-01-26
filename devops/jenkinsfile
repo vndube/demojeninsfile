@@ -61,10 +61,8 @@ pipeline {
 					sh '''
 					git init
                     git add .
-// 			        msg_out = $(git commit -m "adding package.tar")
-//					echo "$msg_out"
-//					if [! echo "$msg_out"|grep -i "nothing to commit"]
 					if [! $(git commit -m "adding package.tar")|grep -i "nothing to commit"]
+					    echo "pushing tar file"
 						git push origin HEAD:master
 					fi
 					'''
