@@ -142,14 +142,16 @@ def sendEventNotification(taskName,taskSeqNumber,
 						   taskMessage,taskAborted) 
 
 		echo jsonData
-		final def (String response, int code) =
- 		         sh(script: "curl --insecure -vs -X POST -w '\\n%{response_code}' ${params.event_publishing_endpoint} -H 'accept: application/json' -H 'Content-Type: application/json' -d ${jsonData}", returnStdout: true).trim().tokenize("\n")
+        sh(script: "echo 'curl --insecure -vs -X POST ${params.event_publishing_endpoint} -H '''accept: application/json''' -H '''Content-Type: application/json''' -d ${jsonData}" , returnStdout: true)
+
+//		final def (String response, int code) =
+// 		         sh(script: "curl --insecure -vs -X POST -w '\\n%{response_code}' ${params.event_publishing_endpoint} -H 'accept: application/json' -H 'Content-Type: application/json' -d ${jsonData}", returnStdout: true).trim().tokenize("\n")
 		
 //		echo response
-		echo "HTTP response status code: $code"
-        if (code == 200) {
-               echo "Successfully published"
-       }
+//		echo "HTTP response status code: $code"
+//        if (code == 200) {
+//               echo "Successfully published"
+//       }
 		
 	 }
 }
