@@ -8,8 +8,8 @@ pipeline {
 		string(name: 'credentialkey', defaultValue: 'Not available', description: 'Credential of user')
 		string(name: 'gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
 
-		string(name: 'target_environment', defaultValue: 'Not available', description: 'Target Environment - Dev, SIT, UAT or Prod')
-		string(name: 'business_scenario_name', defaultValue: 'Not available', description: 'Business Secenario Name')
+		string(name: 'target_environment', defaultValue: 'NotAvailable', description: 'Target Environment - Dev, SIT, UAT or Prod')
+		string(name: 'business_scenario_name', defaultValue: 'NotAvailable', description: 'Business Secenario Name')
 		string(name: 'project_id', defaultValue: 'Project_NA', description: 'Project ID')
 		string(name: 'build_initiating_user_id', defaultValue: 'NA_user_id', description: 'Buld Initiating User ID')
 		string(name: 'business_scenario_name', defaultValue: 'NA_scenarioname', description: 'Buld Initiating User ID')
@@ -104,15 +104,15 @@ def sendEmail(status) {
 def buildJsonStr(taskName,taskSeqNumber,
                            taskCompletionCode,taskReasonCode,
 						   taskMessage,taskAborted){
-    def task_dateTime=new Date()
+    def taskDateTime=new Date()
     def taskId=UUID.randomUUID().toString()
 
 	 def dataStruct = [
               'taskId' : taskId,
-              'taskSequenceNumber' : task_sequence_number,
+              'taskSequenceNumber' : taskSeqNumber,
 			  'totalTasksCount' : 9,
-			  'taskName' : task_name,
-			  'taskDateTime' : task_dateTime,
+			  'taskName' : taskName,
+			  'taskDateTime' : taskDateTime,
 			  'buildId': "${BUILD_ID}",
 			  'targetEnvironment' : ${params.target_environment},
 			  'productName': ${params.product},
@@ -142,7 +142,7 @@ def sendEventNotification(taskName,taskSeqNumber,
 						   taskMessage,taskAborted) 
 
 		echo jsonData
-        sh(script: "echo 'curl --insecure -vs -X POST ${params.event_publishing_endpoint} -H '''accept: application/json''' -H '''Content-Type: application/json''' -d ${jsonData}" , returnStdout: true)
+//        sh(script: "echo 'curl --insecure -vs -X POST ${params.event_publishing_endpoint} -H '''accept: application/json''' -H '''Content-Type: application/json''' -d ${jsonData}" , returnStdout: true)
 
 //		final def (String response, int code) =
 // 		         sh(script: "curl --insecure -vs -X POST -w '\\n%{response_code}' ${params.event_publishing_endpoint} -H 'accept: application/json' -H 'Content-Type: application/json' -d ${jsonData}", returnStdout: true).trim().tokenize("\n")
