@@ -26,13 +26,12 @@ pipeline {
 	    stage('Clone sources') {
 		    steps {
                 echo "Clone Source and Checking out $builddir and client dir is $clientdir"
-				
-				./devops/check_params.sh
-				
 			//	git url: 'https://github.com/vndube/testnewrepo.git'
 				
-				sh 'mkdir -p ' + builddir
+
 				script{
+				     sh './devops/check_params.sh'
+				     sh 'mkdir -p ' + builddir
 				    
 					def paths = [["path":"${gitclientdir}"],["path": "/tars"]]
 					dir(builddir) {
