@@ -109,7 +109,6 @@ def buildJsonStr(taskName,taskSeqNumber,
    def taskDateTime=new Date()
     def taskId=UUID.randomUUID().toString()
 
-		    echo "BBBBBBBBBBBBB"
 
 	 def dataStruct = [
               'taskId' : taskId,
@@ -129,10 +128,8 @@ def buildJsonStr(taskName,taskSeqNumber,
 			  'taskMessage' : taskMessage,
 			  'tasksAborted' : taskAborted
      ]
-	 
 	 def json = new groovy.json.JsonBuilder(dataStruct)
-
-		    echo "CCCCCCCCCCCCCCCCCC"
+     // above requires: Navigate to jenkins > Manage jenkins > In-process Script Approval
 	 
 	 return json.toString()
 }
