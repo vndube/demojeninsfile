@@ -1,32 +1,50 @@
 pipeline {
     agent any
-    parameters {
-		//string(name: 'fname', defaultValue: 'not specified', description: 'First Name')
+	parameters {
+		string(name: 'devops_stage', defaultValue: 'buildandpackage', description: 'DevOps Stage - buildandpackage, SIT, UAT')
+		string(name: 'alm_level', defaultValue: 'Release', description: 'Application Life Cycle Level - Feature, Testing, Release')
+		string(name: 'target_environment', defaultValue: 'Non-Prod', description: 'Target Environment - Prod, Non-Prod')
+		
+		
+		
 		string(name: 'product', defaultValue: 'not specified', description: 'No Product Specified')
 		string(name: 'clientid', defaultValue: 'not specified', description: 'Client Id for which the build will be processed')
 		string(name: 'clientdir', defaultValue: 'clientdir', description: 'Directory of client')
 		string(name: 'credentialkey', defaultValue: 'Not available', description: 'Credential of user')
 		string(name: 'gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
-		
-		string(name: 'event_publishing_endpoint', defaultValue: 'Not available', description: 'Event Publishing URL')
+
+		string(name: 'business_scenario_name', defaultValue: 'NotAvailable', description: 'Business Secenario Name')
+		string(name: 'project_id', defaultValue: 'Project_NA', description: 'Project ID')
+		string(name: 'build_initiating_user_id', defaultValue: 'NA_user_id', description: 'Buld Initiating User ID')
+		string(name: 'business_scenario_name', defaultValue: 'NA_scenarioname', description: 'Buld Initiating User ID')
+				
+		string(name: 'event_publishing_endpoint', defaultValue: 'EndPoint_Not_Aailable', description: 'Event Publishing URL')
 
 		
-    }
+    }    
     environment {
-        builddir = "${params.clientid}"
+		devops_stage = "${params.devops_stage}"
+		target_environment = "${params.target_environment}"
+		alm_level = "${params.alm_level}"
+	  
+		builddir = "${params.clientid}"
 		gitclientdir =  "/${params.clientdir}"
 		clientdir =  "${params.clientdir}"
-        credentialkey = "${params.credentialkey}"
+		credentialkey = "${params.credentialkey}"
 		gitrepourl =  "${params.gitrepourl}"
-		reportZipFile = "package.zip"
 		
-    }
+		
+		 //below is just to push the images 
+		reportZipFile = "package.zip"
+	  
+   }
+
     stages {
 	
-	    stage('Clone sources') {
-		    steps {
-                echo "Clone Source and Checking out $builddir and client dir is $clientdir"
-			//	git url: 'https://github.com/vndube/testnewrepo.git'
+		stage('SCM Initialization') {
+		//this will download the source code from specified SCM. SCM location is passed in parameter named as gitrepourl and credential key id
+		   steps {
+		      echo "Clone the repository under a specified directory. Sparse Check-out will be used."
 				
 				sh 'mkdir -p ' + builddir
 				script{
@@ -39,50 +57,124 @@ pipeline {
 								[$class: 'SparseCheckoutPaths',
 								 sparseCheckoutPaths: paths
 								]
-	//                  		  [$class: 'SparseCheckoutPath', path: gitclientdir, path: '/tars' ]
-	//							 sparseCheckoutPaths: [[path: gitclientdir],[path: '/tars']]
-								], 
+							], 
 						   submoduleCfg: [], 
 						   userRemoteConfigs: [[  credentialsId: credentialkey, url: gitrepourl]]])
-
-	//					   userRemoteConfigs: [[  credentialsId: 'e8f3366fe2096f77c2c0d27b3b0331ffd5eb2c4e', url: 'https://github.com/vndube/testnewrepo.git']]])
 					}
 				}
-		    }
+		    }			  
 		}
+	
+        stage("build, package and push package to repository") {
+		//this stage will perform the packages loaded from  
+ 		    when {
+			    environment name:'devops_stage', value: 'buildandpackage'
+            }
+            
+            stages {
+                stage("build the code") {
+                    steps {
+                        echo "In build"
+                    }
+                }
+                stage("Perform SAST") {
+                   when {
+				      environment name:'alm_level', value: 'Release'
+				   }
+				   steps {
+				      echo "In Performing SAST"
+				   }
+                }				
+                stage("package the bars and others") {
+                    steps {
+                        echo "In package the bars and others"
+                    }
+                }
+				stage("Push bars to SCM") {
+                    steps {
+                        echo "Push bars to SCM"
+                    }
+                }
+				stage("Build Docker Container") {
+                    steps {
+                        echo "Build Docker Container"
+                    }
+                }				
+                stage("Scanning the image") {
+                   when {
+				      environment name:'alm_level', value: 'Release'
+				   }
+				   steps {
+				      echo "In Scanning the image"
+				   }
+                }	
 
-	    //example to to push bar file to Git
-        stage('Collect Reports') {
-            steps {
-   			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
-			   // Create a zip file of content in the workspace
-			   dir("${builddir}") {
-			        sh 'mkdir -pv tars'
-					dir("${clientdir}") {
-					   echo 'current dir is $pwd'
-					   //sh 'echo "Hey I am at build no.  $BUILD_NUMBER">>currentBuildfile' 
-					   sh 'tar -cvf ../tars/package'+clientdir+'.tar .'
-				    }
-					dir("${clientdir}@tmp") {
-					   deleteDir()
+				stage("Perform DIT") {
+					stages {
+						stage("Deploying Image") {
+							steps {
+								echo "In Deploying Image"
+							}
+						}
+						stage("Pushing APIs") {
+							steps {
+								echo "In Pushing APIs"
+							}
+						}
+						stage("Performing DIT ") {
+							steps {
+								echo "In Performing DIT"
+							}
+						}
 					}
-					sh '''
-					git init
-					git add .
-					if ! git commit -m "adding package.tar"|grep -i "nothing to commit\\|no changes added"; 
-					then
-					    echo "pushing tar file"
-						git push origin HEAD:master
-					fi
-					'''
+                }					
+			}
+        }
+
+		stage("Function Testing - SIT") {
+			when {
+				environment name:'devops_stage', value: 'SIT'
+            }
+			stages {
+				stage("SIT - Pull the image and Deploying Image") {
+					steps {
+						echo "SIT - In Deploying Image"
+					}
+				}
+				stage("SIT - Pushing APIs") {
+					steps {
+						echo "SIT - In Pushing APIs"
+					}
+				}
+				stage("Performing SIT ") {
+					steps {
+						echo "In Performing SIT"
+					}
 				}
 			}
-        }		
-        stage('Example') {
-            steps {
-                echo "Hello ${params.fname}"
-                echo "Product: ${params.product}"
-             }
+        }
+		
+		stage("Acceptance Testing - UAT") {
+			when {
+				environment name:'devops_stage', value: 'UAT'
+            }
+			stages {
+				stage("UAT - Pull the image and Deploying Image") {
+					steps {
+						echo "UAT - In Deploying Image"
+					}
+				}
+				stage("UAT - Pushing APIs") {
+					steps {
+						echo "UAT - In Pushing APIs"
+					}
+				}
+				stage("Performing UAT ") {
+					steps {
+						echo "In Performing UAT"
+					}
+				}
+			}
         }
     }
 
@@ -112,7 +204,7 @@ pipeline {
         // And we'd really like to be sure that this build doesn't hang forever, so
         // let's time it out after an hour.
         timeout(time: 25, unit: 'MINUTES')
-    }	
+    }		
 }
 
 
