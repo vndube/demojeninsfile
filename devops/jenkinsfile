@@ -104,8 +104,12 @@ def sendEmail(status) {
 def buildJsonStr(taskName,taskSeqNumber,
                            taskCompletionCode,taskReasonCode,
 						   taskMessage,taskAborted){
-    def taskDateTime=new Date()
+		    echo "AAAAAAAAAAAAAA"
+
+   def taskDateTime=new Date()
     def taskId=UUID.randomUUID().toString()
+
+		    echo "BBBBBBBBBBBBB"
 
 	 def dataStruct = [
               'taskId' : taskId,
@@ -114,12 +118,12 @@ def buildJsonStr(taskName,taskSeqNumber,
 			  'taskName' : taskName,
 			  'taskDateTime' : taskDateTime,
 			  'buildId': "${BUILD_ID}",
-			  'targetEnvironment' : ${params.target_environment},
-			  'productName': ${params.product},
-			  'serviceName' : ${params.business_scenario_name},
-			  'projectId' : ${params.project_id},
-			  'clientCode' : ${params.clientid}, 
-			  'buildInitiatingUserId' : ${params.build_initiating_user_id},
+			  'targetEnvironment' : "${params.target_environment}",
+			  'productName': "${params.product}",
+			  'serviceName' : "${params.business_scenario_name}",
+			  'projectId' : "${params.project_id}",
+			  'clientCode' : "${params.clientid}", 
+			  'buildInitiatingUserId' : "${params.build_initiating_user_id}",
 			  'taskLog' : taskCompletionCode,
 			  'taskReasonCode': taskReasonCode,
 			  'taskMessage' : taskMessage,
@@ -127,6 +131,8 @@ def buildJsonStr(taskName,taskSeqNumber,
      ]
 	 
 	 def json = new groovy.json.JsonBuilder(dataStruct)
+
+		    echo "CCCCCCCCCCCCCCCCCC"
 	 
 	 return json.toString()
 }
@@ -137,10 +143,11 @@ def sendEventNotification(taskName,taskSeqNumber,
 						   taskMessage,taskAborted){
 	 
 	 script {
+	    echo "in send event Notification"
 	    final String jsonData = buildJsonStr(taskName,taskSeqNumber, 
                            taskCompletionCode,taskReasonCode,
 						   taskMessage,taskAborted) 
 
-		echo jsonData
+		//echo jsonData
 	 }
 }
