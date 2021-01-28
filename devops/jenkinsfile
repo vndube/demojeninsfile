@@ -148,6 +148,6 @@ def sendEventNotification(taskName,taskSeqNumber,
                            taskCompletionCode,taskReasonCode,
 						   taskMessage,taskAborted) 
 
-		//echo jsonData
+		echo jsonData
 	 }
 }
