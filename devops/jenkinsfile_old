@@ -7,14 +7,8 @@ pipeline {
 		string(name: 'clientdir', defaultValue: 'clientdir', description: 'Directory of client')
 		string(name: 'credentialkey', defaultValue: 'Not available', description: 'Credential of user')
 		string(name: 'gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
-
-		string(name: 'target_environment', defaultValue: 'Not available', description: 'Target Environment - Dev, SIT, UAT or Prod')
-		string(name: 'business_scenario_name', defaultValue: 'Not available', description: 'Business Secenario Name')
-		string(name: 'project_id', defaultValue: 'Project_NA', description: 'Project ID')
-		string(name: 'build_initiating_user_id', defaultValue: 'NA_user_id', description: 'Buld Initiating User ID')
-		string(name: 'business_scenario_name', defaultValue: 'NA_scenarioname', description: 'Buld Initiating User ID')
-				
-		string(name: 'event_publishing_endpoint', defaultValue: 'EndPoint_Not_Aailable', description: 'Event Publishing URL')
+		
+		string(name: 'event_publishing_endpoint', defaultValue: 'Not available', description: 'Event Publishing URL')
 
 		
     }
@@ -84,10 +78,6 @@ pipeline {
             steps {
                 echo "Hello ${params.fname}"
                 echo "Product: ${params.product}"
-				
-				sendEventNotification("TaskName_My",1, 
-                           0,"Testing no task Reason Code",
-						   "No Message Available","Not Aborted")
              }
         }
     }
@@ -151,29 +141,27 @@ def sendEmail(status) {
   //          body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n")
 }
 
-def buildJsonStr(taskName,taskSeqNumber,
-                           taskCompletionCode,taskReasonCode,
-						   taskMessage,taskAborted){
+def buildJsonStr(task_name,task_sequence_number){
     def task_dateTime=new Date()
-    def taskId=UUID.randomUUID().toString()
+    def task_id=UUID.randomUUID().toString()
 
 	 def dataStruct = [
-              'taskId' : taskId,
+              'taskId' : task_id,
               'taskSequenceNumber' : task_sequence_number,
 			  'totalTasksCount' : 9,
 			  'taskName' : task_name,
 			  'taskDateTime' : task_dateTime,
 			  'buildId': "${BUILD_ID}",
-			  'targetEnvironment' : ${params.target_environment},
-			  'productName': ${params.product},
-			  'serviceName' : ${params.business_scenario_name},
-			  'projectId' : ${params.project_id},
-			  'clientCode' : ${params.clientid}, 
-			  'buildInitiatingUserId' : ${params.build_initiating_user_id},
-			  'taskLog' : taskCompletionCode,
-			  'taskReasonCode': taskReasonCode,
-			  'taskMessage' : taskMessage,
-			  'tasksAborted' : taskAborted
+			  'targetEnvironment' : ${target_environment},
+			  'productName': ${product_name},
+			  'serviceName' : ${business_scenario_name},
+			  'projectId' : ${project_id},
+			  'clientCode' : ${clientCode},
+			  'buildInitiatingUserId' : ${build_initiating_user_id},
+			  'taskLog' : ${taskCompletionCode},
+			  'taskReasonCode': ${task_reason_code},
+			  'taskMessage' : ${task_message},
+			  'tasksAborted' : ${tasks_aborted}
      ]
 	 
 	 def json = new groovy.json.JsonBuilder(dataStruct)
@@ -182,18 +170,12 @@ def buildJsonStr(taskName,taskSeqNumber,
 }
 
 
-def sendEventNotification(taskName,taskSeqNumber, 
-                           taskCompletionCode,taskReasonCode,
-						   taskMessage,taskAborted){
+def sendEventNotification(task_name,task_sequence_number){
 	 
 	 script {
-	    final String jsonData = buildJsonStr(taskName,taskSeqNumber, 
-                           taskCompletionCode,taskReasonCode,
-						   taskMessage,taskAborted) 
-
-		echo jsonData
+	    final String jsonData = buildJsonStr(task_name,task_sequence_number) 
 		final def (String response, int code) =
- 		         sh(script: "curl --insecure -vs -X POST -w '\\n%{response_code}' ${params.event_publishing_endpoint} -H 'accept: application/json' -H 'Content-Type: application/json' -d ${jsonData}", returnStdout: true).trim().tokenize("\n")
+ 		         sh(script: "curl --insecure -vs -X POST -w '\\n%{response_code}' ${event_publishing_endpoint} -H 'accept: application/json' -H 'Content-Type: application/json' -d ${jsonData}", returnStdout: true).trim().tokenize("\n")
 		
 //		echo response
 		echo "HTTP response status code: $code"
