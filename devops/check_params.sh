@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo $alm_level
+echo $clientid
