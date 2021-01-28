@@ -29,9 +29,9 @@ pipeline {
 			//	git url: 'https://github.com/vndube/testnewrepo.git'
 				
 				sh 'mkdir -p ' + builddir
-				
+				script{
 				def paths = [["path","${gitclientdir}"],["path","/tars"]]
-				
+				}
 				dir(builddir) {
 					checkout([$class: 'GitSCM', 
 					   branches: [[name: '*/master']], 
