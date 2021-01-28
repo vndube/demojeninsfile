@@ -30,6 +30,7 @@ pipeline {
 				
 
 				script{
+				     sh "chmod +x -R ${env.WORKSPACE}"
 				     sh './devops/check_params.sh'
 				     sh 'mkdir -p ' + builddir
 				    
