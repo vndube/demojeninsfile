@@ -30,7 +30,7 @@ pipeline {
 				
 				sh 'mkdir -p ' + builddir
 				
-				def paths = [["path","${gitclientdir}"],["path","\'/tars\'"]]
+				def paths = [["path","${gitclientdir}"],["path","/tars"]]
 				
 				dir(builddir) {
 					checkout([$class: 'GitSCM', 
