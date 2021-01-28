@@ -31,7 +31,7 @@ pipeline {
 				sh 'mkdir -p ' + builddir
 				script{
 				def paths = [["path","${gitclientdir}"],["path","/tars"]]
-				}
+				
 				dir(builddir) {
 					checkout([$class: 'GitSCM', 
 					   branches: [[name: '*/master']], 
@@ -47,6 +47,7 @@ pipeline {
 					   userRemoteConfigs: [[  credentialsId: credentialkey, url: gitrepourl]]])
 
 //					   userRemoteConfigs: [[  credentialsId: 'e8f3366fe2096f77c2c0d27b3b0331ffd5eb2c4e', url: 'https://github.com/vndube/testnewrepo.git']]])
+				}
 				}
 		    }
 		}
