@@ -148,6 +148,6 @@ def sendEventNotification(taskName,taskSeqNumber,
                            taskCompletionCode,taskReasonCode,
 						   taskMessage,taskAborted) 
 
-		echo jsonData
+        sh(script: "echo 'curl --insecure -vs -X POST ${params.event_publishing_endpoint} -H '''accept: application/json''' -H '''Content-Type: application/json''' -d ${jsonData}" , returnStdout: true)
 	 }
 }
