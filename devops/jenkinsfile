@@ -29,58 +29,8 @@ pipeline {
     }
     stages {
 	
-	    stage('Clone sources') {
-		    steps {
-                echo "Clone Source and Checking out $builddir and client dir is $clientdir"
-			//	git url: 'https://github.com/vndube/testnewrepo.git'
-				
-				sh 'mkdir -p ' + builddir
-				
-				dir(builddir) {
-					checkout([$class: 'GitSCM', 
-					   branches: [[name: '*/master']], 
-					   doGenerateSubmoduleConfigurations: false, 
-					   extensions: [
-//					        [$class: 'RelativeTargetDirectory', 
-//							relativeTargetDir: 'folder2']
-							[$class: 'SparseCheckoutPaths',
-							 sparseCheckoutPaths: [[path: gitclientdir],[path: '/tars']]]
-							], 
-					   submoduleCfg: [], 
-					   userRemoteConfigs: [[  credentialsId: credentialkey, url: gitrepourl]]])
-
-//					   userRemoteConfigs: [[  credentialsId: 'e8f3366fe2096f77c2c0d27b3b0331ffd5eb2c4e', url: 'https://github.com/vndube/testnewrepo.git']]])
-				}
-		    }
-		}
-
-        stage('Collect Reports') {
-            steps {
-   			   echo "Reports directory: ${workspace}/${builddir}${clientdir}"
-			   // Create a zip file of content in the workspace
-			   dir("${builddir}") {
-			        sh 'mkdir -pv tars'
-					dir("${clientdir}") {
-					   echo 'current dir is $pwd'
-					   //sh 'echo "Hey I am at build no.  $BUILD_NUMBER">>currentBuildfile' 
-					   sh 'tar -cvf ../tars/package'+clientdir+'.tar .'
-				    }
-					dir("${clientdir}@tmp") {
-					   deleteDir()
-					}
-					sh '''
-					git init
-					git add .
-					if ! git commit -m "adding package.tar"|grep -i "nothing to commit\\|no changes added"; 
-					then
-					    echo "pushing tar file"
-						git push origin HEAD:master
-					fi
-					'''
-				}
-			}
-        }		
-        stage('Example') {
+	
+        stage('Function-Test') {
             steps {
                 echo "Hello ${params.fname}"
                 echo "Product: ${params.product}"
