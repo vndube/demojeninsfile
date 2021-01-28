@@ -9,6 +9,8 @@ pipeline {
 		string(name: 'gitrepourl', defaultValue: 'Not available', description: 'Directory of client')
 
 		string(name: 'target_environment', defaultValue: 'NotAvailable', description: 'Target Environment - Dev, SIT, UAT or Prod')
+
+
 		string(name: 'business_scenario_name', defaultValue: 'NotAvailable', description: 'Business Secenario Name')
 		string(name: 'project_id', defaultValue: 'Project_NA', description: 'Project ID')
 		string(name: 'build_initiating_user_id', defaultValue: 'NA_user_id', description: 'Buld Initiating User ID')
@@ -25,7 +27,7 @@ pipeline {
         credentialkey = "${params.credentialkey}"
 		gitrepourl =  "${params.gitrepourl}"
 		reportZipFile = "package.zip"
-		
+		buildStage = "${params.target_environment}"
     }
     stages {
 	
@@ -104,7 +106,6 @@ def sendEmail(status) {
 def buildJsonStr(taskName,taskSeqNumber,
                            taskCompletionCode,taskReasonCode,
 						   taskMessage,taskAborted){
-		    echo "AAAAAAAAAAAAAA"
 
    def taskDateTime=new Date()
     def taskId=UUID.randomUUID().toString()
