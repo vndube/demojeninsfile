@@ -1,3 +1,6 @@
 #!/bin/bash
 
-echo $clientid
+echo "this is my first sh"
+
+echo "client id is " $clientid 
+
